@@ -1,0 +1,24 @@
+name: remote ssh command
+on:
+  push: 
+    branches:
+    - 'main'
+jobs:
+
+  build:
+    if: "contains(github.event.head_commit.message, 'DEPLOY')"
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: ssh_redploy
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /user/fpl-classic-pipeline
+          sudo git pull
+          sudo docker rm $(docker ps -a -f status=exited -q)
+          docker-compose up -d --no-deps --force-recreate --build docker_user_code

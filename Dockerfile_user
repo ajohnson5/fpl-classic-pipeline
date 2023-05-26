@@ -1,0 +1,11 @@
+FROM python:3.8-slim
+
+WORKDIR /opt/dagster/app
+
+COPY requirements.txt /opt/dagster/app
+
+RUN pip install -r requirements.txt
+
+ADD fpl_classic_pipeline /opt/dagster/app/fpl_classic_pipeline
+
+CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000","-m","fpl_classic_pipeline"]
