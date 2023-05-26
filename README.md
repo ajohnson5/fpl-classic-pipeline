@@ -16,8 +16,8 @@ This project utilises the FPL API endpoints to extract player and manager data f
 ## Pipeline functionality
 
 
-1.   Run terraform to deploy Google VM, and other GCP services and initiate docker deployment using  a start-up script.
-2.   Four docker containers are created for the deployment of Dagster.
+1. Run terraform to deploy Google VM, and other GCP services and initiate docker deployment using  a start-up script.
+2. Four docker containers are created for the deployment of Dagster.
     * Postgres - Used for Dagster storage such as event logs and sensor ticks.
     * User code - Location of your code to enable easy redeployment of code changes.
     * Dagster daemon - Long running process which runs the sensors and queues asset materialization. 
