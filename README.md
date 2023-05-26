@@ -1,8 +1,6 @@
 # FPL Classic League Data Pipeline
---- 
 
 ## Overview
----
 This project utilises the FPL API endpoints to extract player and manager data for a specified Invitational Classic League. This data is then visualised and showcased on my Dash web app: [www.fpldashboard.com](http://www.fpldashboard.com/)
 
 
@@ -16,7 +14,7 @@ This project utilises the FPL API endpoints to extract player and manager data f
 
 
 ## Pipeline functionality
----
+
 
 1.   Run terraform to deploy Google VM, and other GCP services and initiate docker deployment using  a start-up script.
 2.   Four docker containers are created for the deployment of Dagster.
