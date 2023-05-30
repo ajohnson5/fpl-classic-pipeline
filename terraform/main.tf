@@ -1,7 +1,10 @@
+# Read all environment variables in .env file into a map
 locals {
   default = tomap({ for tuple in regexall("(.*)=(.*)", file("../.env")) : tuple[0] => tuple[1] })
 }
 
+# Create rendered template of start up script by imputing the values of thhe environment variables
+# using locals map defined above
 data "template_file" "startup_script" {
   template = file("./start_up/start_up_script.sh")
   vars = {
@@ -14,6 +17,14 @@ data "template_file" "startup_script" {
     POSTGRES_DB = local.default.POSTGRES_DB
   }
 }
+
+
+
+##---------------------------------------------------------------------------------------------
+## GENERAL & IAM
+## Create service account and attach storage and bigquery admin permissions to the account.
+##---------------------------------------------------------------------------------------------
+
 
 provider "google" { 
   project = local.default.PROJECT_ID
@@ -39,11 +50,18 @@ resource "google_project_iam_member" "member-role" {
 }
 
 
+
+##---------------------------------------------------------------------------------------------
+## STORAGE
+## Create GCS bucket and BigQuery Dataset
+##---------------------------------------------------------------------------------------------
+
+
 resource "google_storage_bucket" "static" {
- name          = local.default.PROJECT_BUCKET
- location      = "EUROPE-WEST2"
- storage_class = "STANDARD"
- uniform_bucket_level_access = true
+  name          = local.default.PROJECT_BUCKET
+  location      = "EUROPE-WEST2"
+  storage_class = "STANDARD"
+  uniform_bucket_level_access = true
 }
 
 resource "google_bigquery_dataset" "dataset" {
@@ -51,6 +69,13 @@ resource "google_bigquery_dataset" "dataset" {
   location = "EU"
   project = local.default.PROJECT_ID
 }
+
+
+
+##---------------------------------------------------------------------------------------------
+## COMPUTE (VM)
+## Create compute resources such as networl, firewall and google vm instance
+##---------------------------------------------------------------------------------------------
 
 
 resource "google_compute_network" "vpc_network" {
@@ -80,17 +105,17 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-network_interface {
-  network = google_compute_network.vpc_network.name
-  access_config {
+  network_interface {
+    network = google_compute_network.vpc_network.name
+    access_config {
+    }
   }
-}
+  # Use start_up script template
+  metadata_startup_script= data.template_file.startup_script.rendered
 
-metadata_startup_script= data.template_file.startup_script.rendered
-
-service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = google_service_account.default.email
-    scopes = ["bigquery","storage-full"]
-  }
+  service_account {
+      # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+      email  = google_service_account.default.email
+      scopes = ["bigquery","storage-full"]
+    }
 }
