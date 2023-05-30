@@ -1,7 +1,7 @@
 # FPL Classic League Data Pipeline
 
 ## Overview
-This project utilises the FPL API endpoints to extract player and manager data for a specified Invitational Classic League. This data is then visualised and showcased on my Dash web app [www.fpldashboard.com](http://www.fpldashboard.com/). Please use the Wiki to find out how to get started and dive deeper into the inner workings of the project.
+This project utilises the FPL API endpoints to extract player and manager data for a specified Invitational Classic League. This data is then visualised and showcased on my [Dash web app](http://www.fpldashboard.com/).
 
 
 *   Provisison required GCP cloud infrastructure using Terraform. 
@@ -11,6 +11,7 @@ This project utilises the FPL API endpoints to extract player and manager data f
 *   Parquet files are loaded into BigQuery Tables for ad-hoc analysis,scheduled queries and visualisation using Looker Studio (Optional).
 *   Pre-defined queries are run on BigQuery tables and the contents stored once again in GCS to service Dash web app.
 
+The documentation for this project can be found in the [Wiki](https://github.com/ajohnson5/fpl-classic-pipeline/wiki).
 
 
 ## Pipeline functionality
