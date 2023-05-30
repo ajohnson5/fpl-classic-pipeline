@@ -1,6 +1,7 @@
 from dagster import asset, OpExecutionContext
 from google.cloud import bigquery
 from fpl_classic_pipeline.partitions import gameweeks_partitions_def
+from fpl_classic_pipeline.resources import SEASON
 import pandas as pd
 from fpl_classic_pipeline.assets.queries import (
     transfers,
@@ -15,35 +16,35 @@ query_asset_defs = [
     {
         "name": "summary_stats",
         "non_argument_deps": ["bq_manager_gameweek_performance", "bq_manager_gameweek"],
-        "table_names": ["2022_manager_gameweek_performance", "2022_manager_gameweek"],
+        "table_names": [f"{SEASON}_manager_gameweek_performance", f"{SEASON}_manager_gameweek"],
         "group_name": "Analysis",
         "sql": summary_stats,
     },
     {
         "name": "manager_rank",
         "non_argument_deps": ["bq_manager_gameweek_performance"],
-        "table_names": "2022_manager_gameweek_performance",
+        "table_names": f"{SEASON}_manager_gameweek_performance",
         "group_name": "Analysis",
         "sql": manager_rank,
     },
     {
         "name": "transfers",
         "non_argument_deps": ["bq_manager_gameweek", "bq_player_gameweek"],
-        "table_names": ["2022_manager_gameweek", "2022_player_gameweek"],
+        "table_names": [f"{SEASON}_manager_gameweek", f"{SEASON}_player_gameweek"],
         "group_name": "Analysis",
         "sql": transfers,
     },
     {
         "name": "points_on_bench",
         "non_argument_deps": ["bq_manager_gameweek", "bq_manager_gameweek_performance"],
-        "table_names": ["2022_manager_gameweek", "2022_manager_gameweek_performance"],
+        "table_names": [f"{SEASON}_manager_gameweek", f"{SEASON}_manager_gameweek_performance"],
         "group_name": "Analysis",
         "sql": points_on_bench,
     },
     {
         "name": "chip_usage",
         "non_argument_deps": ["bq_manager_gameweek_performance"],
-        "table_names": "2022_manager_gameweek_performance",
+        "table_names": f"{SEASON}_manager_gameweek_performance",
         "group_name": "Analysis",
         "sql": chip_usage,
     },
