@@ -23,7 +23,7 @@ query_asset_defs = [
     {
         "name": "manager_rank",
         "non_argument_deps": ["bq_manager_gameweek_performance"],
-        "table_names": f"{SEASON}_manager_gameweek_performance",
+        "table_names": [f"{SEASON}_manager_gameweek_performance"],
         "group_name": "Analysis",
         "sql": manager_rank,
     },
@@ -44,7 +44,7 @@ query_asset_defs = [
     {
         "name": "chip_usage",
         "non_argument_deps": ["bq_manager_gameweek_performance"],
-        "table_names": f"{SEASON}_manager_gameweek_performance",
+        "table_names": [f"{SEASON}_manager_gameweek_performance"],
         "group_name": "Analysis",
         "sql": chip_usage,
     },
@@ -54,19 +54,17 @@ query_asset_defs = [
 def execute_bigquery(
     context: OpExecutionContext, table_names, sql: str, partition_key: str = ""
 ) -> pd.DataFrame:
+
     gc_config = context.resources.google_config
-    if isinstance(table_names, list):
+    # Define indicators that will be replaced with BigQuery table names
+    sql_replace_placeholder = ['$','^']
+    # Iterate through tables used in the SQL queries and replace the placeholder with
+    # the table names 
+    for i,table_name in enumerate(table_names):
         table_path = (
-            f'{gc_config["project_ID"]}.{gc_config["dataset"]}.{table_names[0]}'
+            f'{gc_config["project_ID"]}.{gc_config["dataset"]}.{table_name}'
         )
-        sql = sql.replace("$", table_path)
-        table_path = (
-            f'{gc_config["project_ID"]}.{gc_config["dataset"]}.{table_names[1]}'
-        )
-        sql = sql.replace("^", table_path)
-    else:
-        table_path = f'{gc_config["project_ID"]}.{gc_config["dataset"]}.{table_names}'
-        sql = sql.replace("$", table_path)
+        sql = sql.replace(sql_replace_placeholder[i], table_path)
 
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
