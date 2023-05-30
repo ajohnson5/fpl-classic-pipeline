@@ -27,7 +27,7 @@ def manager_gameweek_performance(context):
     Returns:
         pd.DataFrame: DataFrame containing manager performance data for each gameweek.
     """
-    # Using league 1 as an example but will be changed later
+    # Extract list of managers in league
     managers = [x["manager_id"] for x in manager_id_from_league_api(league_id)]
 
     manager_performance = []
