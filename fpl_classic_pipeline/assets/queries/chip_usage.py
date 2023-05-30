@@ -1,6 +1,6 @@
 chip_usage = """
 WITH
-  CTE AS (
+  active_chips AS (
   SELECT
     manager_id,
     event,
@@ -12,7 +12,7 @@ WITH
   WHERE
     chip IS NOT NULL
     AND event = @gameweek),
-  CTE2 AS (
+  null_chips AS (
   SELECT
     manager_id,
     event,
@@ -24,7 +24,7 @@ WITH
   WHERE
     chip IS NULL
     AND event = @gameweek),
-  CTE3 AS (
+  gameweek_chips AS (
   SELECT
     manager_id,
     event AS `Gameweek`,
@@ -32,7 +32,7 @@ WITH
     chip AS `Chip`,
     counter
   FROM
-    CTE
+    active_chips
   UNION ALL
   SELECT
     manager_id,
@@ -41,11 +41,11 @@ WITH
     chip AS `Chip`,
     counter
   FROM
-    CTE2)
+    null_chips)
 SELECT
   *
 FROM
-  CTE3
+  gameweek_chips
 ORDER BY
   manager_id
 """
