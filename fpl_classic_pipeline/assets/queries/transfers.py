@@ -1,6 +1,6 @@
 transfers = """
 WITH
-  CTE AS (
+  CTE_player_frequency AS (
   SELECT
     manager_id,
     gameweek,
@@ -16,19 +16,19 @@ WITH
     (multiplier >0)
     AND ((gameweek=@gameweek)
       OR (gameweek=@gameweek-1))),
-  CTE_in AS (
+  CTE_player_in AS (
   SELECT
     manager_id,
     STRING_AGG(full_name,', ') AS `players_in`,
     SUM(total_points) AS `points_in`
   FROM
-    CTE
+    CTE_player_frequency
   WHERE
     (gameweek=@gameweek)
     AND (player_freq=1)
   GROUP BY
     manager_id ),
-  CTE_out AS (
+  CTE_player_out AS (
   SELECT
     manager_id,
     gameweek,
@@ -36,17 +36,17 @@ WITH
     full_name,
     total_points
   FROM
-    CTE
+    CTE_player_frequency
   WHERE
     (gameweek=@gameweek-1)
     AND (player_freq_reverse=1)),
-  CTE_out_points AS (
+  CTE_points_out AS (
   SELECT
     t1.manager_id,
     STRING_AGG(t1.full_name,', ') AS `players_out`,
     SUM(t2.total_points) AS `points_out`
   FROM
-    CTE_out AS t1
+    CTE_player_out AS t1
   LEFT JOIN
     ^ AS t2
   ON
@@ -62,9 +62,9 @@ SELECT
   p_out.players_out AS `Players Transferred Out`,
   @gameweek as `Gameweek`
 FROM
-  CTE_in AS p_in
+  CTE_player_in AS p_in
 INNER JOIN
-  CTE_out_points AS p_out
+  CTE_points_out AS p_out
 ON
   p_in.manager_id = p_out.manager_id
 """
