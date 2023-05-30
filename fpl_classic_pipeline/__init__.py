@@ -14,7 +14,7 @@ from fpl_classic_pipeline.sensors import fixture_sensor
 from fpl_classic_pipeline.resources import google_cloud_config, gcs_parquet_io_manager
 
 
-# Configure resources for the deployment environments (development/production)
+# Configure resources for the deployment
 resource_env = {
     "google_config": google_cloud_config.configured(
         {
