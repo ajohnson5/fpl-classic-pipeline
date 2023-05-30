@@ -68,10 +68,6 @@ def execute_bigquery(
         table_path = f'{gc_config["project_ID"]}.{gc_config["dataset"]}.{table_names}'
         sql = sql.replace("$", table_path)
 
-    sql = sql.replace(
-        "&", f'{",".join([str(x) for x in range(1,int(context.partition_key)+1)])}'
-    )
-
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
             bigquery.ScalarQueryParameter(
