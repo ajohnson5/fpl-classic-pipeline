@@ -6,7 +6,7 @@ This project utilises the FPL API endpoints to extract player and manager data f
 
 *   Provisison required GCP cloud infrastructure using Terraform. 
 *   Docker-compose is used to run a multi-container Dagster deployment which orchestrates the whole data pipeline.
-*   A sensor checks if a gameweek has been completed - If it has then successful the data pipeline is initiated for the recently completed gameweek.
+*   A sensor checks if a gameweek has been completed - If successful, the data pipeline is initiated for the recently completed gameweek.
 *   Data is extracted using the FPL API endpoints and loaded into a GCS bucket as Parquet files.
 *   Parquet files are loaded into BigQuery Tables for ad-hoc analysis,scheduled queries and visualisation using Looker Studio (Optional).
 *   Pre-defined queries are run on BigQuery tables and the contents stored once again in GCS to service Dash web app.
