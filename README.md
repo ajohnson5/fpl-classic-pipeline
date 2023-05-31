@@ -11,7 +11,13 @@ This project utilises the FPL API endpoints to extract player and manager data f
 *   Parquet files are loaded into BigQuery Tables for ad-hoc analysis,scheduled queries and visualisation using Looker Studio (Optional).
 *   Pre-defined queries are run on BigQuery tables and the contents stored once again in GCS to service Dash web app.
 
-The documentation for this project can be found in the [Wiki](https://github.com/ajohnson5/fpl-classic-pipeline/wiki).
+Check out the [Wiki](https://github.com/ajohnson5/fpl-classic-pipeline/wiki) to find out how to get started yourself and dive deeper into the inner workings of the pipeline.
+
+
+
+## Data Flow Diagram
+
+![Data Flow Diagram](https://user-images.githubusercontent.com/99501368/241185212-53756a4a-d1a7-46ac-99f5-050e914822d3.jpg)
 
 
 ## Pipeline functionality
@@ -34,6 +40,3 @@ The documentation for this project can be found in the [Wiki](https://github.com
 
 
 
-## Data Flow Diagram
-
-![Data Flow Diagram](https://user-images.githubusercontent.com/99501368/241185212-53756a4a-d1a7-46ac-99f5-050e914822d3.jpg)
